@@ -1,6 +1,6 @@
 # Data Summarization Tool
 
-The **Data Summarization Tool** is a web-based application designed to automatically generate concise summaries from long-form text documents. By leveraging NLP (Natural Language Processing) techniques, this tool helps users extract the most relevant information quickly and efficiently. Users can upload `.txt` or `.docx` files and receive the summarized content directly on the interface and optionally via email.
+The **Data Summarization Tool** is a web-based application designed to automatically generate concise summaries from long-form text documents. By leveraging NLP (Natural Language Processing) techniques, this tool helps users extract the most relevant information quickly and efficiently. Users can upload `.txt` or `.docx` files and receive the summarized content directly on the interface.
 
 ---
 
