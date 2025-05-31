@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Summaries</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f4f4f4; }
+        button { padding: 8px 12px; margin: 5px; cursor: pointer; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                 background: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
+        .popup button { background: red; color: white; border: none; padding: 5px 10px; }
+    </style>
+    	
+<script language="Javascript" type="text/javascript">
+ 
+
+	function createRequestObject() {
+		var tmpXmlHttpObject;
+		if (window.XMLHttpRequest) {
+				tmpXmlHttpObject = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			tmpXmlHttpObject = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+	
+		return tmpXmlHttpObject;
+	}
+	
+	
+	var http = createRequestObject();
+	
+	function makeGetRequest(st,st1) {
+	   // st=document.frm.state.value;
+	   //alert(st);
+      // alert(st1);
+		http.open('get', '/Summary?summaryId=' + st+'&type=' + st1);
+		http.onreadystatechange = processResponse;
+		http.send(null);
+	}
+	
+	function processResponse() {
+		if(http.readyState == 4){
+			var response = http.responseText;
+            document.getElementById("summaryText").innerText = response;
+            document.getElementById("popup").style.display = "block"; 
+			 
+		}
+	}
+	 
+	</script>
+</head>
+<body>
+    {% include "top1.html" %}
+    <div class="container">
+    <h2>Document Summaries</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>User ID</th>
+                <th>Document  </th>
+                <th>Date</th>
+                <th>Summaries</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr>
+                <td>{{ doc.title }}</td>
+                <td>{{ doc.userid }}</td>
+                <td><a href="../static/Documents/{{ doc.userid }}/{{ doc.doc_path }}" target="_blank">Download</a> </td>
+                <td>{{ doc.dt }}</td>
+                <td>
+                    <button onclick="makeGetRequest({{ doc.summaryId }}, 'summary1')">Abstractive Summary </button>
+                    <!--<button onclick="makeGetRequest({{ doc.summaryId }}, 'summary2')">Summary 2</button>
+                    <button onclick="makeGetRequest({{ doc.summaryId }}, 'summary3')">Extractive Summary </button>-->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <div id="popup" class="popup">
+        <button onclick="closePopup()">Close</button>
+        <h3>Summary</h3>
+        <div id="summaryText"></div>
+    </div>
+
+    <script>
+        function fetchSummary(summaryId, summaryType) {
+            $.ajax({
+                url: `/summary/${summaryId}`,
+                type: 'GET',
+                success: function(data) {
+                    if (data[summaryType]) {
+                        let decodedSummary = atob(data[summaryType]);  // Correct Base64 decoding
+                        document.getElementById("summaryText").innerText = decodedSummary;
+                        document.getElementById("popup").style.display = "block";
+                    } else {
+                        alert("No summary available.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching summary:", xhr.responseText);
+                    alert(xhr.responseText);
+                    alert("Failed to fetch summary. Check console for details.");
+                }
+            });
+        }
+    
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
