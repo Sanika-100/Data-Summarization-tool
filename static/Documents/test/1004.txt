@@ -1,0 +1,7 @@
+Abstractive text summarization is the process of generating a concise and coherent version of a longer text while preserving its meaning.
+Unlike extractive summarization, which selects and copies the most important sentences from the original text,
+abstractive summarization aims to create entirely new sentences that convey the most critical information.
+This technique requires advanced natural language processing capabilities, as it needs to capture the essence of the original content
+and express it in a different way.
+Recent advancements in deep learning, particularly with models like BART, T5, and Pegasus, have significantly improved the quality of
+abstractive summarization. These models are pre-trained on large datasets and can be fine-tuned for specific summarization tasks.
